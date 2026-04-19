@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Registro de Lead</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Impulsa tu negocio 🚀</h2>
+        
+        <form id="leadForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                <input type="text" name="nombre" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                    placeholder="Ej. Juan Pérez">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Corporativo</label>
+                <input type="email" name="email" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                    placeholder="juan@empresa.com">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">¿En qué podemos ayudarte?</label>
+                <textarea name="mensaje" rows="4" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                    placeholder="Cuéntanos sobre tu proyecto o empresa..."></textarea>
+            </div>
+
+            <button type="submit" 
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-colors duration-300 shadow-md">
+                Enviar Solicitud
+            </button>
+        </form>
+        
+        <div id="responseMsg" class="mt-4 text-center text-sm hidden"></div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxbgCSjCwRYPSLhSZo2nH2FfIz0rijPhl2-j0yJ6jCl4zoX2A7gFWGN-6sNz2s0hIQOMw/exec';
+        const form = document.getElementById('leadForm');
+        const msg = document.getElementById('responseMsg');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            msg.classList.remove('hidden');
+            msg.textContent = "Enviando...";
+            msg.classList.add('text-gray-500');
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    msg.textContent = "¡Gracias! Nos pondremos en contacto pronto.";
+                    msg.classList.replace('text-gray-500', 'text-green-600');
+                    form.reset();
+                })
+                .catch(error => {
+                    msg.textContent = "Error al enviar. Intenta de nuevo.";
+                    msg.classList.replace('text-gray-500', 'text-red-600');
+                });
+        });
+    </script>
+</body>
+</html>
